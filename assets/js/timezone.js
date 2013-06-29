@@ -369,6 +369,9 @@ function updateClock() {
         seconds = $(this).find('.time_sec').html();
         format = $(this).find('.time_format').html();
         
+        if(hours>12){
+            hours = 01;
+        }
         if(minutes>59){
             minutes = 00;
             hours++;
