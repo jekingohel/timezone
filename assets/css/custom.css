@@ -1,0 +1,14 @@
+@import url(http://fonts.googleapis.com/css?family=Droid+Sans:400,700);
+body {
+    padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+    font-family: 'Droid Sans', sans-serif;
+    padding-bottom: 40px;
+    font-size: 15px;
+}
+.hrow {
+    font-weight:bold;
+    color: #555;
+}
+.hrow td{
+    padding-top: 20px;
+}
