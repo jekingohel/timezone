@@ -368,55 +368,30 @@ function updateClock() {
         minutes = $(this).find('.time_min').html();
         seconds = $(this).find('.time_sec').html();
         format = $(this).find('.time_format').html();
-        //setInterval(function() {
-
-          //  updateClock(hours,minutes,seconds,format)
-        //}, 2000);
-    });
-   // console.log(seconds)
-    // Gets the current time
-    /*var now = new Date();
- 
-    // Get the hours, minutes and seconds from the current time
-    var hours = now.getHours();
-    var minutes = now.getMinutes();
-    var seconds = now.getSeconds();
-    */
-    // Format hours, minutes and seconds
-    
-    if (minutes < 10) {
-        minutes = "0" + minutes;
-    }
-    if (seconds < 10) {
-        seconds = "0" + seconds;
-    }else{
-        seconds++;
-    }
-    //seconds++;
-    console.log(seconds);
-    $('.timezoneContainer').each(function () {
-       /// $(this).find('.time_hour').html(hours);
-       // $(this).find('.time_min').html(minutes);
+        
+        if(minutes>59){
+            minutes = 00;
+            hours++;
+        }
+        if(seconds>59){
+            seconds = 00;
+            minutes++;
+        }
+        if (minutes < 9) {
+            minutes++;
+            minutes = "0"+minutes;
+        }
+        if (seconds < 9) {
+            seconds++;
+            seconds = "0"+seconds;
+        }else{
+            seconds++;
+        }
+        $(this).find('.time_hour').html(hours);
+        $(this).find('.time_min').html(minutes);
         $(this).find('.time_sec').html(seconds);
-        //$(this).find('.time_format').html(format);
     });
-    // Gets the element we want to inject the clock into
-    //var elem = document.getElementById('clock');
-    
-    // Sets the elements inner HTML value to our clock data
-    //elem.innerHTML = hours + ':' + minutes + ':' + seconds;
 }
 setInterval(function() {
     updateClock();
 }, 1000);
-/*
-$('.timezoneContainer').each(function () {
-    var hours = $(this).find('.time_hour').text();
-    var minutes = $(this).find('.time_min').text();
-    var seconds = $(this).find('.time_sec').text();
-    var format = $(this).find('.time_format').text();
-    setInterval(function() {
-        
-        updateClock(hours,minutes,seconds,format)
-    }, 2000);
-});*/
