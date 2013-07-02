@@ -287,10 +287,10 @@ if($('#homeClock').length>0){
                     month -= -1
                 }
             }
-            return monthArray[month] + " " + day + ", " + year + "<br><i class='icon-time'></i>" + hr + ":" + min + ":" + sec + " DST"
+            return monthArray[month] + " " + day + ", " + year + "<br><i class='icon-time'></i><span class='timer'>" + hr + ":" + min + ":" + sec + "</span> DST"
         }
         else{
-            return monthArray[month] + " " + day + ", " + year + "<br><i class='icon-time'></i>" + hr + ":" + min + ":" + sec
+            return monthArray[month] + " " + day + ", " + year + "<br><i class='icon-time'></i><span class='timer'>" + hr + ":" + min + ":" + sec + "</span>";
         }
     }
 
@@ -370,20 +370,21 @@ function updateClock() {
         format = $(this).find('.time_format').html();
         
         if(hours>12){
-            hours = 01;
+            hours = '01';
         }
         if(minutes>59){
-            minutes = 00;
+            minutes = '00';
             hours++;
         }
         if(seconds>59){
-            seconds = 00;
-            minutes++;
+            seconds = '00';
+            if (minutes < 9) {
+                minutes++;
+                minutes = "0"+minutes;
+            }else
+                minutes++;
         }
-        if (minutes < 9) {
-            minutes++;
-            minutes = "0"+minutes;
-        }
+        
         if (seconds < 9) {
             seconds++;
             seconds = "0"+seconds;

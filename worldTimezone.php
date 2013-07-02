@@ -58,7 +58,7 @@
     //echo '<pre>';
 ?>
 <h1>World clock by timezone</h1>
-<table cellspacing="5px" class="table table-hover">
+<table cellspacing="5px" class="table table-hover table-bordered">
     <tbody>
     <?php
         foreach($rowsData as $key=>$value){
@@ -73,7 +73,7 @@
                  ?>
                         <td class="timezoneContainer">
                             <b><?= $k ?></b>
-                            <p>
+                            <p class="timer">
                                 <i class='icon-time'></i> 
                                 <span class="time_hour"><?= $val['time_hour'] ?></span> :
                                 <span class="time_min"><?= $val['time_min'] ?></span> : 
@@ -81,7 +81,7 @@
                                 <span class="time_format"><?= $val['time_format'] ?></span>
                             </p>
                             <p>
-                                <i class="icon-map-marker"></i><span class="badge badge-inverse"><?= $val['offset_string'] ?></span>
+                                <i class="icon-map-marker"></i><span class="badge"><?= $val['offset_string'] ?></span>
                             </p>
                         </td>
                 <?php

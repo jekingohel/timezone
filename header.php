@@ -22,11 +22,11 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a class="brand" href="#">Timezone</a>
+                        <a class="brand" href="index.php">Timezone</a>
                         <div class="nav-collapse collapse">
                             <ul class="nav">
-                                <li class="active"><a href="index.php">Home</a></li>
-                                <li><a href="convertTimezone.php">Convert Timezone</a></li>
+                                <li><a href="index.php">Home</a></li>
+                                <li><a href="worldTimezone.php">World Timezone</a></li>
                                 <li><a href="#contact">Contact</a></li>
                             </ul>
                         </div><!--/.nav-collapse -->

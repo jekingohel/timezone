@@ -12,3 +12,5 @@ body {
 .hrow td{
     padding-top: 20px;
 }
+.timer { font-weight: bold;
+font-size: 25px; }
