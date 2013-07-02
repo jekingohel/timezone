@@ -374,7 +374,11 @@ function updateClock() {
         }
         if(minutes>59){
             minutes = '00';
-            hours++;
+            if (hours < 9) {
+                hours++;
+                hours = "0"+hours;
+            }else
+                hours++;
         }
         if(seconds>59){
             seconds = '00';

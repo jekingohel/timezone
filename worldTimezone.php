@@ -15,6 +15,7 @@
                 $z = new DateTimeZone($zone['timezone_id']);
                 $c = new DateTime(null, $z);
                 $zone['time'] = $c->format('h:i:s A');
+                $zone['date'] = $c->format('l F d, Y');
                 $zone['time_hour'] = $c->format('h');
                 $zone['time_min'] = $c->format('i');
                 $zone['time_sec'] = $c->format('s');
@@ -35,6 +36,7 @@
                                             'offset_string' => 'GMT '. formatOffset($row['offset']),
                                             'offset' => formatOffset($row['offset']),
                                             'time' => $row['time'],
+                                            'date' => $row['date'],
                                             'time_hour' => $row['time_hour'],
                                             'time_min' => $row['time_min'],
                                             'time_sec' => $row['time_sec'],
@@ -73,6 +75,7 @@
                  ?>
                         <td class="timezoneContainer">
                             <b><?= $k ?></b>
+                            <p style="margin-top: 5px"><i class="icon-globe"></i><span class="date"><?= $val['date'] ?></span></p>
                             <p class="timer">
                                 <i class='icon-time'></i> 
                                 <span class="time_hour"><?= $val['time_hour'] ?></span> :
@@ -81,7 +84,7 @@
                                 <span class="time_format"><?= $val['time_format'] ?></span>
                             </p>
                             <p>
-                                <i class="icon-map-marker"></i><span class="badge"><?= $val['offset_string'] ?></span>
+                                <i class="icon-map-marker"></i><span class="badge offset"><?= $val['offset_string'] ?></span>
                             </p>
                         </td>
                 <?php
