@@ -9,6 +9,9 @@
         <link href="assets/css/bootstrap.css" rel="stylesheet">
         <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
         <link href="assets/css/custom.css" rel="stylesheet">
+        <link href="assets/css/select2.css" rel="stylesheet">
+        <link href="assets/css/datepicker.css" rel="stylesheet">
+        <link href="assets/css/timepicker.css" rel="stylesheet">
         <!--[if IE]>
         <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
         <![endif]-->
@@ -27,7 +30,7 @@
                             <ul class="nav">
                                 <li><a href="index.php">Home</a></li>
                                 <li><a href="worldTimezone.php">World Timezone</a></li>
-                                <li><a href="#contact">Contact</a></li>
+                                <li><a href="convert.php">Convert Timezone</a></li>
                             </ul>
                         </div><!--/.nav-collapse -->
                     </div>
