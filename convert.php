@@ -1,6 +1,7 @@
 <?php include('header.php') ?>
 <?php
 $idents = DateTimeZone::listIdentifiers();
+//http://time.is/compare
 ?>
 <h1>Convert Timezone</h1>
 <div class="form-actions">
