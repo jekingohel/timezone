@@ -18,4 +18,23 @@ body {
 input[disabled], select[disabled], textarea[disabled], input[readonly], select[readonly], textarea[readonly] {
     background-color: #fff;
 }
-
+.details { opacity: 0; }
+.loader { 
+    display: none;
+    position: absolute;
+    top:0;
+    left:0;
+    background-color: white;
+    width:100%;
+    z-index:1000;
+    height:100%;
+    opacity: .8;
+}
+.loader img {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    margin-left: -32px; /* -1 * image width / 2 */
+    margin-top: -32px;  /* -1 * image height / 2 */
+    display: block; 
+}

@@ -3,9 +3,10 @@
 $idents = DateTimeZone::listIdentifiers();
 //http://time.is/compare
 ?>
+<div class="loader"><img src="assets/img/ajax-loader.gif"/></div>
 <h1>Time here and there</h1>
 <div class="form-actions">
-    <form id="converttimeForm" novalidate="novalidate" name="converttimeForm" class="form-horizontal" method="post"  style="margin: 0">
+    <form id="converttimeForm" name="converttimeForm" class="form-horizontal" method="post"  style="margin: 0">
         <div class="control-group">
             <label class="control-label">Location or time zone : </label>
             <div class="controls">
@@ -38,45 +39,52 @@ $idents = DateTimeZone::listIdentifiers();
     </form>
 </div>
 <div class="details">
-    <h2>Time in <span class="fromName text-warning">Rajkot</span> and <span class="toName text-success">New York</span></h2>
-    <p class="text-info">When the time was 08:00 on Thursday, July 4 in Rajkot, it was 22:30 on Wednesday, July 3, 2013 in New York</p>
-    <blockquote>
-        <table>
-            <tr>
-                <td><b>From Location </b></td><td>&nbsp;:&nbsp;</td>
-                <td class="fromLocation">Rajkot, Gujrat</td>
-            </tr>
-            <tr>
-                <td>Current Time</td><td>&nbsp;:&nbsp;</td>
-                <td class="fromCurrentTime">Thursday, July 4, 2013 12:42 PM</td>
-            </tr>
-            <tr>
-                <td>Time zone</td><td>&nbsp;:&nbsp;</td>
-                <td class="fromTimezone">Brasilia Standard Time (America/Sao_Paulo)</td>
-            </tr>
-            <tr>
-                <td>Map</td><td>&nbsp;:&nbsp;</td>
-                <td><div id="from_map_canvas" style="width: 100%; height: 200px"></div></td>
-            </tr>
-            <tr><td colspan="3">&nbsp;</td></tr>
-            <tr>
-                <td><b>To Location </b>  </td><td>&nbsp;:&nbsp;</td>
-                <td class="toLocation">Rajkot, Gujrat</td>
-            </tr>
-            <tr>
-                <td>Current Time</td><td>&nbsp;:&nbsp;</td>
-                <td class="toCurrentTime">Thursday, July 4, 2013 12:42 PM</td>
-            </tr>
-            <tr>
-                <td>Time zone</td><td>&nbsp;:&nbsp;</td>
-                <td class="toTimezone">Brasilia Standard Time (America/Sao_Paulo)</td>
-            </tr>
-            <tr>
-                <td>Map</td><td>&nbsp;:&nbsp;</td>
-                <td><div id="to_map_canvas" style="width: 100%; height: 200px"></div></td>
-            </tr>
-        </table>
-   </<blockquote>
+    <h2>Time in <span class="fromLocation text-warning">Rajkot</span> and <span class="toLocation text-success">New York</span></h2>
+    <p class="text-info">When the time was <b><span class="fromresTime">08:00 AM</span> on <span class="fromresDate"></span></b> in <span class="fromLocation text-warning">Rajkot</span>, it was <b><span class="toresTime">08:00 AM</span> on <span class="toresDate"></span></b> in <span class="toLocation text-success">New York</span>.</p>
+    <div class="pull-left" style="width:50%">
+        <blockquote>
+            <table>
+                <tr>
+                    <td><b>From Location </b></td><td>&nbsp;:&nbsp;</td>
+                    <td class="fromLocation">Rajkot, Gujrat</td>
+                </tr>
+                <tr>
+                    <td>Current Time</td><td>&nbsp;:&nbsp;</td>
+                    <td class="fromCurrentTime">Thursday, July 4, 2013 12:42 PM</td>
+                </tr>
+                <tr>
+                    <td>Time zone</td><td>&nbsp;:&nbsp;</td>
+                    <td class="fromTimezone">Brasilia Standard Time (America/Sao_Paulo)</td>
+                </tr>
+                <tr>
+                    <td>Map</td><td>&nbsp;:&nbsp;</td>
+                    <td><div id="from_map_canvas" style="width: 100%; height: 200px"></div></td>
+                </tr>
+            </table>
+        </blockquote>
+    </div>
+    <div class="pull-left" style="width:50%">
+        <blockquote>
+            <table>
+                <tr>
+                    <td><b>To Location </b>  </td><td>&nbsp;:&nbsp;</td>
+                    <td class="toLocation">Rajkot, Gujrat</td>
+                </tr>
+                <tr>
+                    <td>Current Time</td><td>&nbsp;:&nbsp;</td>
+                    <td class="toCurrentTime">Thursday, July 4, 2013 12:42 PM</td>
+                </tr>
+                <tr>
+                    <td>Time zone</td><td>&nbsp;:&nbsp;</td>
+                    <td class="toTimezone">Brasilia Standard Time (America/Sao_Paulo)</td>
+                </tr>
+                <tr>
+                    <td>Map</td><td>&nbsp;:&nbsp;</td>
+                    <td><div id="to_map_canvas" style="width: 100%; height: 200px"></div></td>
+                </tr>
+            </table>
+        </blockquote>
+    </div>
 </div>
 
 <?php include('footer.php') ?>
@@ -89,13 +97,13 @@ $idents = DateTimeZone::listIdentifiers();
             autoclose : true
         });   
         $('.timepicker').timepicker();
-        $("#from_location").geocomplete({ map: "#from_map_canvas" }).bind("geocode:result", function(event, result){
+        $("#from_location").geocomplete({ map: "#from_map_canvas",mapOptions: { zoom: 10 } }).bind("geocode:result", function(event, result){
             tagObject['from_location'] = result
             var latitute= result.geometry.location.jb;
             var longitute = result.geometry.location.kb;
             getTimezone(latitute,longitute,'from_location');
         });
-        $("#to_location").geocomplete({ map: "#to_map_canvas" }).bind("geocode:result", function(event, result){
+        $("#to_location").geocomplete({ map: "#to_map_canvas",mapOptions: { zoom: 10 } }).bind("geocode:result", function(event, result){
             tagObject['to_location'] = result;
             var latitute= result.geometry.location.jb;
             var longitute = result.geometry.location.kb;
@@ -104,6 +112,7 @@ $idents = DateTimeZone::listIdentifiers();
         $('#converttimeForm').submit(function(){
             var success =  $('#converttimeForm').valid();
             if (success == true){
+                $('.loader').show();
                 $('.fromLocation').html($('#from_location').val());
                 $('.toLocation').html($('#to_location').val());
                 var fromDate = new Date(tagObject.from_location.current_timestamp);
@@ -112,11 +121,27 @@ $idents = DateTimeZone::listIdentifiers();
                 $('.toCurrentTime').html(dayName(toDate.getDay())+', '+monthName(toDate.getMonth())+' '+toDate.getDate()+', '+toDate.getFullYear()+' '+toDate.toLocaleTimeString());
                 $('.fromTimezone').html(tagObject.from_location.geo.timeZoneName+' ('+tagObject.from_location.geo.timeZoneId+')');
                 $('.toTimezone').html(tagObject.to_location.geo.timeZoneName+' ('+tagObject.to_location.geo.timeZoneId+')');
+                $.post('convertTimezone.php',
+                    { 
+                        fromTimezone : tagObject.from_location.geo.timeZoneId, 
+                        toTimezone : tagObject.to_location.geo.timeZoneId,
+                        date : $('#date').val(),
+                        time : $('#time').val()
+                    },function(response){
+                        var res = $.parseJSON(response);
+                        $('.fromresTime').html(res.from.time)
+                        $('.fromresDate').html(res.from.date)
+                        $('.toresTime').html(res.to.time)
+                        $('.toresDate').html(res.to.date)
+                        $('.details').css('opacity','1')
+                        $('.loader').fadeOut();
+                });
                 console.log(tagObject);
                 return false;
             }else{
                 return false;
             }
+            return false;
         });
         $validator=$("#converttimeForm").validate({
             rules:{
