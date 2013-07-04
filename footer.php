@@ -8,5 +8,6 @@
 		<script src="assets/js/bootstrap-datepicker.js"></script>
 		<script src="assets/js/bootstrap-timepicker.js"></script>
 		<script src="assets/js/jquery.geocomplete.js"></script>
+		<script src="assets/js/jquery.validate.js"></script>
 	</body>
 </html>

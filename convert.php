@@ -3,47 +3,179 @@
 $idents = DateTimeZone::listIdentifiers();
 //http://time.is/compare
 ?>
-<h1>Convert Timezone</h1>
+<h1>Time here and there</h1>
 <div class="form-actions">
-    <form style="margin: 0">
-        <label class="inline-label">Location or time zone : </label>
-        <input type="text" name="from_location" class="" id="from_location"/>
-        &nbsp;&nbsp;<label class="inline-label">Other locations or time zones : </label>
-        <input type="text" name="to_location" class="" id="to_location"/>
-        &nbsp;&nbsp;<label class="inline-label">Date/Time : </label>
-        <input type="text" name="date" class="datepicker" placeholder="Enter a date"/>
-        <input type="text" name="time" class="timepicker input-small" placeholder="Enter a time"/><br/>
-        <button type="submit" name="submit" class="btn btn-info" >Submit</button>
+    <form id="converttimeForm" novalidate="novalidate" name="converttimeForm" class="form-horizontal" method="post"  style="margin: 0">
+        <div class="control-group">
+            <label class="control-label">Location or time zone : </label>
+            <div class="controls">
+                <input type="text" name="from_location" class="" id="from_location"/>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">Other locations or time zones : </label>
+            <div class="controls">
+                <input type="text" name="to_location" class="" id="to_location"/>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">Date : </label>
+            <div class="controls">
+                <input type="text" name="date" readonly id="date" class="datepicker" placeholder="Enter a date"/>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label">Time : </label>
+            <div class="controls">
+                <input type="text" name="time" id="time" readonly  class="timepicker input-small" placeholder="Enter a time"/>
+            </div>
+        </div>
+        <div class="control-group">
+            <div class="controls">
+                <input type="submit" name="submit" class="btn btn-info" id="compare_time" value="Compare time" />
+            </div>
+        </div>
     </form>
 </div>
+<div class="details">
+    <h2>Time in <span class="fromName text-warning">Rajkot</span> and <span class="toName text-success">New York</span></h2>
+    <p class="text-info">When the time was 08:00 on Thursday, July 4 in Rajkot, it was 22:30 on Wednesday, July 3, 2013 in New York</p>
+    <blockquote>
+        <table>
+            <tr>
+                <td><b>From Location </b></td><td>&nbsp;:&nbsp;</td>
+                <td class="fromLocation">Rajkot, Gujrat</td>
+            </tr>
+            <tr>
+                <td>Current Time</td><td>&nbsp;:&nbsp;</td>
+                <td class="fromCurrentTime">Thursday, July 4, 2013 12:42 PM</td>
+            </tr>
+            <tr>
+                <td>Time zone</td><td>&nbsp;:&nbsp;</td>
+                <td class="fromTimezone">Brasilia Standard Time (America/Sao_Paulo)</td>
+            </tr>
+            <tr>
+                <td>Map</td><td>&nbsp;:&nbsp;</td>
+                <td><div id="from_map_canvas" style="width: 100%; height: 200px"></div></td>
+            </tr>
+            <tr><td colspan="3">&nbsp;</td></tr>
+            <tr>
+                <td><b>To Location </b>  </td><td>&nbsp;:&nbsp;</td>
+                <td class="toLocation">Rajkot, Gujrat</td>
+            </tr>
+            <tr>
+                <td>Current Time</td><td>&nbsp;:&nbsp;</td>
+                <td class="toCurrentTime">Thursday, July 4, 2013 12:42 PM</td>
+            </tr>
+            <tr>
+                <td>Time zone</td><td>&nbsp;:&nbsp;</td>
+                <td class="toTimezone">Brasilia Standard Time (America/Sao_Paulo)</td>
+            </tr>
+            <tr>
+                <td>Map</td><td>&nbsp;:&nbsp;</td>
+                <td><div id="to_map_canvas" style="width: 100%; height: 200px"></div></td>
+            </tr>
+        </table>
+   </<blockquote>
+</div>
+
 <?php include('footer.php') ?>
 <script>
+    var tagObject = {};
     $(document).ready(function(){
-        //$('select').select2();
-        //$('#from_timezone').select2('val',getTimezoneName());
         $('.datepicker').datepicker({
             currentText: "Now",
             format: 'yyyy-mm-dd',
             autoclose : true
         });   
         $('.timepicker').timepicker();
-        $("#from_location").geocomplete();
-        $("#to_location").geocomplete().bind("geocode:result", function(event, result){
+        $("#from_location").geocomplete({ map: "#from_map_canvas" }).bind("geocode:result", function(event, result){
+            tagObject['from_location'] = result
             var latitute= result.geometry.location.jb;
             var longitute = result.geometry.location.kb;
-            $.getJSON('https://maps.googleapis.com/maps/api/timezone/json?location='+latitute+','+longitute+'&timestamp='+ Math.round(+new Date()/1000) +'&sensor=true',
-            function(data){
-                console.log(data);
-                console.log(calcTime(result.formatted_address,data.rawOffset));
-            });
-        });;
+            getTimezone(latitute,longitute,'from_location');
+        });
+        $("#to_location").geocomplete({ map: "#to_map_canvas" }).bind("geocode:result", function(event, result){
+            tagObject['to_location'] = result;
+            var latitute= result.geometry.location.jb;
+            var longitute = result.geometry.location.kb;
+            getTimezone(latitute,longitute,'to_location');
+        });
+        $('#converttimeForm').submit(function(){
+            var success =  $('#converttimeForm').valid();
+            if (success == true){
+                $('.fromLocation').html($('#from_location').val());
+                $('.toLocation').html($('#to_location').val());
+                var fromDate = new Date(tagObject.from_location.current_timestamp);
+                var toDate = new Date(tagObject.to_location.current_timestamp);
+                $('.fromCurrentTime').html(dayName(fromDate.getDay())+', '+monthName(fromDate.getMonth())+' '+fromDate.getDate()+', '+fromDate.getFullYear()+' '+fromDate.toLocaleTimeString());
+                $('.toCurrentTime').html(dayName(toDate.getDay())+', '+monthName(toDate.getMonth())+' '+toDate.getDate()+', '+toDate.getFullYear()+' '+toDate.toLocaleTimeString());
+                $('.fromTimezone').html(tagObject.from_location.geo.timeZoneName+' ('+tagObject.from_location.geo.timeZoneId+')');
+                $('.toTimezone').html(tagObject.to_location.geo.timeZoneName+' ('+tagObject.to_location.geo.timeZoneId+')');
+                console.log(tagObject);
+                return false;
+            }else{
+                return false;
+            }
+        });
+        $validator=$("#converttimeForm").validate({
+            rules:{
+                date:{
+                    required:true
+                },
+                time:{
+                    required:true
+                },
+                to_location: {
+                    required:true
+                },
+                from_location: {
+                    required:true
+                }
+            },
+            errorClass: "help-inline",
+            errorElement: "span",
+            errorPlacement: function (error, element) {
+                error.appendTo(element.parents(".controls:first"));
+            },
+            highlight:function(element, errorClass, validClass) {
+                $(element).parents('.control-group').addClass('error');
+                $(element).parents('.control-group').removeClass('success');
+            },
+            unhighlight: function(element, errorClass, validClass) {
+                $(element).parents('.control-group').removeClass('error');
+                $(element).parents('.control-group').addClass('success');
+            }               
+        }); 
     });
-    function calcTime(city, offset) {
+    function calcTime(offset) {
         d = new Date();
         utc = d.getTime() + (d.getTimezoneOffset() * 60000);
         offset = offset*1000;
         var of = (Math.floor(offset/3600) +'.'+ Math.floor(offset % 3600))/1000;
         nd = new Date(utc +  (3600000*of));
-        return "The local time in " + city + " is " + nd.toLocaleString();
+        return (utc +  (3600000*of));
+    }
+    function getTimezone(latitute,longitute,type){
+        $.getJSON('https://maps.googleapis.com/maps/api/timezone/json?location='+latitute+','+longitute+'&timestamp='+ Math.round(+new Date()/1000) +'&sensor=true',
+        function(data){
+            tagObject[type]['geo'] = data;
+            tagObject[type]['current_timestamp'] = calcTime(data.rawOffset);
+        });
+    }
+    function dayName(day){
+        var weekday=new Array(7);
+        weekday[0]="Sunday";
+        weekday[1]="Monday";
+        weekday[2]="Tuesday";
+        weekday[3]="Wednesday";
+        weekday[4]="Thursday";
+        weekday[5]="Friday";
+        weekday[6]="Saturday";
+        return weekday[day];
+    }
+    function monthName(month){
+        var monthNames = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
+        return monthNames[month];
     }
 </script>
