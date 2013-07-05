@@ -1,5 +1,13 @@
 <?php
-//print_r($_POST);
+/* function converttimezone() is use for converting date into specific timezone.
+ * It's realy easy and effective function for timezone conversion.
+ * There are three perametes which have $c_date, $timeto, $timefrom.
+ * $c_date is date which you want to convert from specific timezone.
+ * $timeto is timezone which you want to get result for that timezone.
+ * $timefrom is timezone which you want to get result from that timezone.
+ * Thank You.
+ * Developed by Jekin A. Gohel
+ */
 $datetime = date('Y-m-d H:i:s',strtotime($_POST['date'].' '.$_POST['time']));
 $utcFromDate = converttimezone($datetime,'GMT', $_POST['fromTimezone']);
 $utcToDateFinal = converttimezone($utcFromDate, $_POST['toTimezone'],'GMT');
@@ -10,7 +18,7 @@ $data['to']['time'] = date('h:i A',strtotime($utcToDateFinal));
 $data['to']['date'] = date('l, F d, Y',strtotime($utcToDateFinal));
 echo json_encode($data);
 
-function converttimezone($eventdate,$timeto='GMT',$timefrom='GMT'){               
+function converttimezone($c_date,$timeto='GMT',$timefrom='GMT'){               
     
     //convert one timezone to another timezone
     $dayLightFlag = false;
@@ -31,7 +39,7 @@ function converttimezone($eventdate,$timeto='GMT',$timefrom='GMT'){
     $diff1 = (strtotime($gmt) - strtotime($local));
     $diff2 = (strtotime($required) - strtotime($gmt));
 
-    $date = new DateTime($eventdate);
+    $date = new DateTime($c_date);
 
     $date->modify("+$diff1 seconds");
     $date->modify("+$diff2 seconds");
