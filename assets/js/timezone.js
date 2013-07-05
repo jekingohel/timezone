@@ -398,8 +398,50 @@ function updateClock() {
         $(this).find('.time_sec').html(seconds);
     });
 }
+function updateClock24() {
+    var hours,minutes,seconds,format;
+    $('.timezoneContainer').each(function () {
+        hours = $(this).find('.time_hour').html();
+        minutes = $(this).find('.time_min').html();
+        seconds = $(this).find('.time_sec').html();
+        format = $(this).find('.time_format').html();
+        
+        if(hours>24){
+            hours = '01';
+        }
+        if(minutes>59){
+            minutes = '00';
+            if (hours < 9) {
+                hours++;
+                hours = "0"+hours;
+            }else
+                hours++;
+        }
+        if(seconds>59){
+            seconds = '00';
+            if (minutes < 9) {
+                minutes++;
+                minutes = "0"+minutes;
+            }else
+                minutes++;
+        }
+        
+        if (seconds < 9) {
+            seconds++;
+            seconds = "0"+seconds;
+        }else{
+            seconds++;
+        }
+        $(this).find('.time_hour').html(hours);
+        $(this).find('.time_min').html(minutes);
+        $(this).find('.time_sec').html(seconds);
+    });
+}
 setInterval(function() {
-    updateClock();
+    if($('.homeClock').length>0)
+        updateClock();
+    if($('.timeclock').length>0)
+        updateClock24();
 }, 1000);
 function getTimezoneName() {
     tmSummer = new Date(Date.UTC(2005, 6, 30, 0, 0, 0, 0));
@@ -473,4 +515,75 @@ function getTimezoneName() {
     if (780 == so && 780 == wo) return 'Pacific/Enderbury'
     if (840 == so && 840 == wo) return 'Pacific/Kiritimati';
     return 'US/Pacific';
+}
+function dayName(day){
+    var weekday=new Array(7);
+    weekday[0]="Sunday";
+    weekday[1]="Monday";
+    weekday[2]="Tuesday";
+    weekday[3]="Wednesday";
+    weekday[4]="Thursday";
+    weekday[5]="Friday";
+    weekday[6]="Saturday";
+    return weekday[day];
+}
+function monthName(month){
+    var monthNames = [ "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December" ];
+    return monthNames[month];
+}
+var geocoder;
+
+if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(successFunction, errorFunction);
+} 
+//Get the latitude and the longitude;
+function successFunction(position) {
+    var lat = position.coords.latitude;
+    var lng = position.coords.longitude;
+    codeLatLng(lat, lng)
+}
+
+function errorFunction(){
+    alert("Geocoder failed");
+}
+
+function initialize() {
+    geocoder = new google.maps.Geocoder();
+}
+
+function codeLatLng(lat, lng) {
+    var latlng = new google.maps.LatLng(lat, lng);
+    geocoder.geocode({
+        'latLng': latlng
+    }, function(results, status) {
+        if (status == google.maps.GeocoderStatus.OK) {
+            console.log(results[2].formatted_address)
+            if($('.city_name').length>0)
+                $('.city_name').html(results[2].formatted_address);
+            if (results[1]) {
+                //formatted address
+                //alert(results[0].formatted_address)
+                //find country name
+                for (var i=0; i<results[0].address_components.length; i++) {
+                    for (var b=0;b<results[0].address_components[i].types.length;b++) {
+
+                        //there are different types that might hold a city admin_area_lvl_1 usually does in come cases looking for sublocality type will be more appropriate
+                        if (results[0].address_components[i].types[b] == "administrative_area_level_1") {
+                            //this is the object you are looking for
+                            city= results[0].address_components[i];
+                            break;
+                        }
+                    }
+                }
+                //city data
+                //alert(city.short_name + " " + city.long_name)
+
+
+            } else {
+                //alert("No results found");
+            }
+        } else {
+            //alert("Geocoder failed due to: " + status);
+        }
+    });
 }
