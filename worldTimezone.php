@@ -57,10 +57,10 @@
 
     }
     $rowsData = array_chunk($options,5,true);
-    //echo '<pre>';
+	
 ?>
 <h1>World clock by timezone</h1>
-<table cellspacing="5px" class="table table-hover table-bordered">
+<table cellspacing="5px" class="table table-hover table-bordered homeClock">
     <tbody>
     <?php
         foreach($rowsData as $key=>$value){
